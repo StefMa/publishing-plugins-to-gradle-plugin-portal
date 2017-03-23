@@ -34,7 +34,7 @@
    <div style="padding-top: 10px;">
     <a href="https://guides.gradle.org"><img src="http://guides.gradle.org/gradle-guides.svg" alt=""></a>
    </div> 
-   <h1>Publishing Plugins to Gradle Plugin Portal <span class="image"><a class="image" href="https://travis-ci.org/gradle-guides/publishing-plugins-to-gradle-plugin-portal"><img src="https://travis-ci.org/gradle-guides/publishing-plugins-to-gradle-plugin-portal.svg?branch=master" alt="Build Status"></a></span></h1> 
+   <h1>Publishing Plugins to Gradle Plugin Portal</h1> 
    <div id="toc" class="toc2"> 
     <div id="toctitle">
      Table of Contents
@@ -47,7 +47,6 @@
      <li><a href="#configure_the_plugin_publishing_plugin">Configure the Plugin Publishing Plugin</a></li> 
      <li><a href="#publish_your_plugin">Publish your plugin</a></li> 
      <li><a href="#consume_the_published_plugin">Consume the published plugin</a></li> 
-     <li><a href="#summary">Summary</a></li> 
      <li><a href="#next_steps">Next steps</a></li> 
     </ul> 
    </div> 
@@ -56,7 +55,10 @@
    <div id="preamble"> 
     <div class="sectionbody"> 
      <div class="paragraph"> 
-      <p>Provides a brief introduction to publishing and how it works Makes concrete statements about what the plugin portal is and isn’t</p> 
+      <p>Sharing a plugin with others means publishing it to any type of repository that is supported by Gradle. Sharing a plugin on a global scale requires using a well-known repository. the <a href="https://plugins.gradle.org">Gradle Plugin Portal</a> provides a centralised repository that is dedicated to Gradle plugins and which is also easily searchable.</p> 
+     </div> 
+     <div class="paragraph"> 
+      <p>The <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">Plugin Publishing Plugin</a> provides a convenient DSL to publish to the Gradle Plugin Portal and reduce a large number of configuration steps that might be needed when publishing to another Maven repository. It also provides a number of checks to validate that your plugin meets the criteria for publishing to the Gradle Plugin Portal.</p> 
      </div> 
     </div> 
    </div> 
@@ -64,7 +66,7 @@
     <h2 id="what_you_ll_build"><a class="anchor" href="#what_you_ll_build"></a>What you’ll build</h2> 
     <div class="sectionbody"> 
      <div class="paragraph"> 
-      <p>You will take an exisisting plugin and configure its project so that the plugin is publishable ßto the Gradle Plugin Portal.</p> 
+      <p>You will take an existing plugin and configure its project so that the plugin is publishable to the Gradle Plugin Portal.</p> 
      </div> 
     </div> 
    </div> 
@@ -86,7 +88,7 @@
        <tbody>
         <tr> 
          <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> 
-         <td class="content"> If you have never written a plugin, you can look at the <a href="https://github.com/gradle-guides/greeting-plugin-example">Greeting Plugin example</a>, but please do not try to publish this to the Gradle Plugin Portal. You can also look at <a href="https://guides.gradle.org" class="bare">https://guides.gradle.org</a> </td> 
+         <td class="content"> If you have never written a plugin, you can look at the <a href="https://github.com/gradle-guides/greeting-plugin-example">Greeting Plugin example</a>, but please do not try to publish this to the Gradle Plugin Portal. You can also look at <a href="https://guides.gradle.orgwriting-gradle-plugins">Writing Gradle Plugins</a>. </td> 
         </tr> 
        </tbody>
       </table> 
@@ -129,7 +131,7 @@
       </div> 
      </div> 
      <div class="paragraph"> 
-      <p>It is common practive to place to copy-paste the text into your <code>$HOME/.gradle/gradle.properties</code> file, but if you wish you can place it elsewhere. All that the plugin requires is that <code>gradle.publish.key</code> and <code>gradle.publish.secret</code> are available as project properties when the appropriate Plugin portal tasks are executed.</p> 
+      <p>It is common practice to copy-paste the text into your <code>$HOME/.gradle/gradle.properties</code> file, but if you wish you can place it elsewhere. All that the plugin requires is that <code>gradle.publish.key</code> and <code>gradle.publish.secret</code> are available as project properties when the appropriate Plugin portal tasks are executed.</p> 
      </div> 
      <div class="paragraph"> 
       <p>Once you have the API key you can publish as many plugins as you like.</p> 
@@ -139,6 +141,9 @@
    <div class="sect1"> 
     <h2 id="add_the_plugin_publishing_plugin_to_the_project"><a class="anchor" href="#add_the_plugin_publishing_plugin_to_the_project"></a>Add the Plugin Publishing Plugin to the project</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Add the Plugin Publishing Plugin to the <code>plugins</code> block.</p> 
+     </div> 
      <div class="listingblock"> 
       <div class="title">
        build.gradle
@@ -149,13 +154,23 @@
 }</code></pre> 
       </div> 
      </div> 
+     <div class="colist arabic"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td><i class="conum" data-value="1"></i><b>1</b></td> 
+         <td>The latest version can be found on <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">portal</a>.</td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
     <h2 id="configure_the_plugin_publishing_plugin"><a class="anchor" href="#configure_the_plugin_publishing_plugin"></a>Configure the Plugin Publishing Plugin</h2> 
     <div class="sectionbody"> 
      <div class="paragraph"> 
-      <p><strong>TBC: These settings are set for the whole plugin bundle</strong></p> 
+      <p>Create a <code>pluginBundle</code> block and specify global information regarding your plugin. (it can also be about a bundle of plugins). This helps other people which a browsing the portal to find more information about your plugin and possibly how to contribute to its development.</p> 
      </div> 
      <div class="listingblock"> 
       <div class="title">
@@ -177,7 +192,7 @@
         </tr> 
         <tr> 
          <td><i class="conum" data-value="2"></i><b>2</b></td> 
-         <td>Set the website for your plugin’s project</td> 
+         <td>Set the website for your plugin’s project.</td> 
         </tr> 
         <tr> 
          <td><i class="conum" data-value="3"></i><b>3</b></td> 
@@ -187,7 +202,7 @@
       </table> 
      </div> 
      <div class="paragraph"> 
-      <p><strong>TBC Transition paragraph to plugins block</strong></p> 
+      <p>Now specify the details of the plugin. This is done in a <code>plugins</code> block within the <code>pluginBundle</code> block. The most important part is the <code>id</code> as that is what will uniquely identify it on the Gradle Plugin Portal and prevent namespace clashes between different plugin authors. Substitute the values from this example with ones specific to your plugin. Take your time to think about good entries as all of this contribute to a better experience for people looking for specific plugins</p> 
      </div> 
      <div class="listingblock"> 
       <div class="title">
@@ -228,7 +243,7 @@
         </tr> 
         <tr> 
          <td><i class="conum" data-value="5"></i><b>5</b></td> 
-         <td>Set a description that will be displayed on the portal. Although this is optional it provides useful information to people would might want to use your plugin.</td> 
+         <td>Set a description that will be displayed on the portal. Although this is optional it provides useful information to people would might want to use your plugin and it is highly recommended to spend some time on this property.</td> 
         </tr> 
         <tr> 
          <td><i class="conum" data-value="6"></i><b>6</b></td> 
@@ -241,13 +256,29 @@
        </tbody>
       </table> 
      </div> 
+     <div class="paragraph"> 
+      <p>Congratulation, You are now ready to publish your plugin.</p> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
     <h2 id="publish_your_plugin"><a class="anchor" href="#publish_your_plugin"></a>Publish your plugin</h2> 
     <div class="sectionbody"> 
      <div class="paragraph"> 
-      <p><strong>TBC: Describe running publishPlugins</strong></p> 
+      <p>Publish the plugin by using the <code>publishPlugin</code> task.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="content"> 
+       <pre>$ ./gradlew publishPlugins</pre> 
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>If you have not configured your Gradle Plugin Portal key and secret in your <code>gradle.properties</code> file you can specify it on the command-line</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="content"> 
+       <pre>$ ./gradlew publishPlugins -Pgradle.publish.key=&lt;key&gt; -Pgradle.publish.secret=&lt;secret&gt;</pre> 
+      </div> 
      </div> 
     </div> 
    </div> 
@@ -255,15 +286,7 @@
     <h2 id="consume_the_published_plugin"><a class="anchor" href="#consume_the_published_plugin"></a>Consume the published plugin</h2> 
     <div class="sectionbody"> 
      <div class="paragraph"> 
-      <p><strong>TBC: Instructions on portal</strong></p> 
-     </div> 
-    </div> 
-   </div> 
-   <div class="sect1"> 
-    <h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2> 
-    <div class="sectionbody"> 
-     <div class="paragraph"> 
-      <p><strong>TBC</strong></p> 
+      <p>Once your plugin has been published, the instructions for others to use it will automatically appear on the plugin under a URL such as <code><a href="https://plugins.gradle.org/plugin/<your-plugin-id>" class="bare">https://plugins.gradle.org/plugin/&lt;your-plugin-id&gt;</a>;</code>.</p> 
      </div> 
     </div> 
    </div> 
@@ -280,7 +303,7 @@
   </div> 
   <div id="footer"> 
    <div id="footer-text">
-     Last updated 2017-03-22 14:39:03 UTC 
+     Last updated 2017-03-23 23:19:15 UTC 
    </div> 
   </div>  
  </body>
