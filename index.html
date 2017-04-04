@@ -5,7 +5,7 @@
   <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <meta name="generator" content="Asciidoctor 1.5.3"> 
-  <title>Creating Composite Builds</title> 
+  <title>Publishing Plugins to Gradle Plugin Portal</title> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> 
   <link rel="stylesheet" href="./coderay-asciidoctor.css"> 
   <link rel="stylesheet" href="https://guides.gradle.org/asciidoctor.css"> 
@@ -16,8 +16,8 @@
   <link rel="manifest" href="https://guides.gradle.org/icon/manifest.json"> 
   <link rel="mask-icon" href="https://guides.gradle.org/icon/safari-pinned-tab.svg" color="#5bbad5"> 
   <link rel="shortcut icon" href="https://guides.gradle.org/icon/favicon.ico"> 
-  <meta name="apple-mobile-web-app-title" content="Creating Composite Builds"> 
-  <meta name="application-name" content="Creating Composite Builds"> 
+  <meta name="apple-mobile-web-app-title" content="Publishing Plugins to Gradle Plugin Portal"> 
+  <meta name="application-name" content="Publishing Plugins to Gradle Plugin Portal"> 
   <meta name="msapplication-config" content="https://guides.gradle.org/icon/browserconfig.xml"> 
   <meta name="theme-color" content="#ffffff"> 
   <script>
@@ -34,7 +34,7 @@
    <div style="padding-top: 10px;">
     <a href="https://guides.gradle.org"><img src="http://guides.gradle.org/gradle-guides.svg" alt=""></a>
    </div> 
-   <h1>Creating Composite Builds <span class="image"><a class="image" href="https://travis-ci.org/gradle-guides/publishing-plugins-to-gradle-plugin-portal"><img src="https://travis-ci.org/gradle-guides/publishing-plugins-to-gradle-plugin-portal.svg?branch=master" alt="Build Status"></a></span></h1> 
+   <h1>Publishing Plugins to Gradle Plugin Portal</h1> 
    <div id="toc" class="toc2"> 
     <div id="toctitle">
      Table of Contents
@@ -42,48 +42,336 @@
     <ul class="sectlevel1"> 
      <li><a href="#what_you_ll_build">What you’ll build</a></li> 
      <li><a href="#what_you_ll_need">What you’ll need</a></li> 
-     <li><a href="#step_1">Step 1</a></li> 
-     <li><a href="#step_2">Step 2</a></li> 
-     <li><a href="#step_n">Step N</a></li> 
-     <li><a href="#summary">Summary</a></li> 
+     <li><a href="#create_an_account_on_the_gradle_plugin_portal">Create an account on the Gradle Plugin Portal</a></li> 
+     <li><a href="#add_the_plugin_publishing_plugin_to_the_project">Add the Plugin Publishing Plugin to the project</a></li> 
+     <li><a href="#configure_the_plugin_publishing_plugin">Configure the Plugin Publishing Plugin</a></li> 
+     <li><a href="#publish_your_plugin">Publish your plugin</a></li> 
+     <li><a href="#consume">Consume the published plugin</a></li> 
+     <li><a href="#next_steps">Next steps</a></li> 
     </ul> 
    </div> 
   </div> 
   <div id="content"> 
+   <div id="preamble"> 
+    <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Sharing a plugin with others means publishing the artifact, along with specific metadata and in most cases the <code>pom.xml</code>, to any type of repository that is supported by Gradle. Sharing a plugin on a global scale requires using a well-known repository. The <a href="https://plugins.gradle.org">Gradle Plugin Portal</a> provides a centralized repository that is dedicated to Gradle plugins and which is also easily searchable.</p> 
+     </div> 
+     <div class="paragraph"> 
+      <p>The <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">Plugin Publishing Plugin</a> provides a convenient DSL to publish to the Gradle Plugin Portal and thereby eliminating a large number of configuration steps that might otherwise be needed when publishing to different Maven repository. It also provides a number of checks to validate that your plugin meets the criteria for publishing to the Gradle Plugin Portal.</p> 
+     </div> 
+    </div> 
+   </div> 
    <div class="sect1"> 
     <h2 id="what_you_ll_build"><a class="anchor" href="#what_you_ll_build"></a>What you’ll build</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>You will take an existing plugin project and configure it so that the plugin is publishable to the Gradle Plugin Portal.</p> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
     <h2 id="what_you_ll_need"><a class="anchor" href="#what_you_ll_need"></a>What you’ll need</h2> 
     <div class="sectionbody"> 
+     <div class="ulist"> 
+      <ul> 
+       <li> <p>About 25 minutes</p> </li> 
+       <li> <p>A text editor</p> </li> 
+       <li> <p>A command prompt</p> </li> 
+       <li> <p>The Java Development Kit (JDK), version 1.7 or higher</p> </li> 
+       <li> <p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 3.4.1 or better</p> </li> 
+       <li> <p>Source code for an existing Gradle plugin. (Preferably your own).</p> </li> 
+      </ul> 
+     </div> 
+     <div class="admonitionblock note"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> 
+         <td class="content"> If you have never written a plugin, you can use the <a href="https://github.com/gradle-guides/greeting-plugin-example">Greeting Plugin example</a>. Also see <a href="https://guides.gradle.org/writing-gradle-plugins">Writing Gradle Plugins</a> for other plugin ideas. </td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
-    <h2 id="step_1"><a class="anchor" href="#step_1"></a>Step 1</h2> 
+    <h2 id="create_an_account_on_the_gradle_plugin_portal"><a class="anchor" href="#create_an_account_on_the_gradle_plugin_portal"></a>Create an account on the Gradle Plugin Portal</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>If you never published a plugin before you need to create a account on the Gradle Plugin Portal. This consists of three steps:</p> 
+     </div> 
+     <div class="olist arabic"> 
+      <ol class="arabic"> 
+       <li> <p>Create an account.</p> </li> 
+       <li> <p>Create an API key.</p> </li> 
+       <li> <p>Add your API key to your Gradle configuration.</p> </li> 
+      </ol> 
+     </div> 
+     <div class="paragraph"> 
+      <p>First go to the <a href="https://plugins.gradle.org/user/register">registration page</a> and create an account.</p> 
+     </div> 
+     <div class="imageblock"> 
+      <div class="content"> 
+       <img src="images/registration-page-552x432.png" alt="registration page 552x432"> 
+      </div> 
+      <div class="title">
+       Figure 1. Registration page
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>Follow the instructions on that page. Once you have logged in, you can get your API key via the “API Keys” tab of your profile page.</p> 
+     </div> 
+     <div class="imageblock"> 
+      <div class="content"> 
+       <img src="images/api-keys-860x208.png" alt="api keys 860x208"> 
+      </div> 
+      <div class="title">
+       Figure 2. API keys is the third tab
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>It is common practice to copy-paste the text into your <a href="https://docs.gradle.org/3.4.1/userguide/build_environment.html#properties">$HOME/.gradle/gradle.properties</a> file, but if you wish you can place it elsewhere. All that the plugin requires is that <code>gradle.publish.key</code> and <code>gradle.publish.secret</code> are available as project properties when the appropriate Plugin portal tasks are executed.</p> 
+     </div> 
+     <div class="paragraph"> 
+      <p>If you are concerned about placing your credentials in <code>gradle.properties</code>, investigate use of <a href="https://plugins.gradle.org/plugin/de.qaware.seu.as.code.credentials">Seauc Credentials plugin</a> or the <a href="https://plugins.gradle.org/plugin/nu.studer.credentials">Gradle Credentials plugin</a>.</p> 
+     </div> 
+     <div class="paragraph"> 
+      <p>Once you have the API key you can publish as many plugins as you like.</p> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
-    <h2 id="step_2"><a class="anchor" href="#step_2"></a>Step 2</h2> 
+    <h2 id="add_the_plugin_publishing_plugin_to_the_project"><a class="anchor" href="#add_the_plugin_publishing_plugin_to_the_project"></a>Add the Plugin Publishing Plugin to the project</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Add the Plugin Publishing Plugin to the <code>plugins</code> block.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="title">
+       build.gradle
+      </div> 
+      <div class="content"> 
+       <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
+    id <span class="string"><span class="delimiter">'</span><span class="content">com.gradle.plugin-publish</span><span class="delimiter">'</span></span> version <span class="string"><span class="delimiter">'</span><span class="content">0.9.7</span><span class="delimiter">'</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre> 
+      </div> 
+     </div> 
+     <div class="colist arabic"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td><i class="conum" data-value="1"></i><b>1</b></td> 
+         <td>The latest version can be found on <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">portal</a>.</td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
-    <h2 id="step_n"><a class="anchor" href="#step_n"></a>Step N</h2> 
+    <h2 id="configure_the_plugin_publishing_plugin"><a class="anchor" href="#configure_the_plugin_publishing_plugin"></a>Configure the Plugin Publishing Plugin</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Create a <code>pluginBundle</code> block in <code>build.gradle</code> and specify global information regarding your plugin. This helps other people browsing the portal find more information about your plugin and learn how to contribute to its development.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="title">
+       build.gradle
+      </div> 
+      <div class="content"> 
+       <pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle { <i class="conum" data-value="1"></i><b>(1)</b>
+    website = <span class="string"><span class="delimiter">'</span><span class="content">&lt;substitute your project website&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="2"></i><b>(2)</b>
+    vcsUrl = <span class="string"><span class="delimiter">"</span><span class="content">&lt;uri to project's source repository&gt;</span><span class="delimiter">"</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre> 
+      </div> 
+     </div> 
+     <div class="colist arabic"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td><i class="conum" data-value="1"></i><b>1</b></td> 
+         <td>Everything for the plugin is configured in the <code>pluginBundle</code> extension block.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="2"></i><b>2</b></td> 
+         <td>Set the website for your plugin’s project.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="3"></i><b>3</b></td> 
+         <td>Provide the source repository URI so that others can find it if they want to contribute.</td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
+     <div class="paragraph"> 
+      <p>Now specify the details of the plugin. This is done in a <code>plugins</code> block within the <code>pluginBundle</code> block. The most important part is the <code>id</code>, as that both uniquely identifies it on the Gradle Plugin Portal and prevents namespace clashes between different plugin authors. It should follow a domain namespace pattern i.e. <code>org.samples.greeting</code>. Substitute the values from this example with ones specific to your plugin. Take your time to think about good entries, as this information contributes to a better experience for people looking for specific plugins.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="title">
+       build.gradle
+      </div> 
+      <div class="content"> 
+       <pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
+  plugins { <i class="conum" data-value="1"></i><b>(1)</b>
+      greetingsPlugin {  <i class="conum" data-value="2"></i><b>(2)</b>
+          id = <span class="string"><span class="delimiter">'</span><span class="content">&lt;your plugin identifier&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
+          displayName = <span class="string"><span class="delimiter">'</span><span class="content">&lt;short displayable name for plugin&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="4"></i><b>(4)</b>
+          description = <span class="string"><span class="delimiter">'</span><span class="content">&lt;Good human-readable description of what your plugin is about&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="5"></i><b>(5)</b>
+          tags = [<span class="string"><span class="delimiter">'</span><span class="content">individual</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">tags</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">per</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">plugin</span><span class="delimiter">'</span></span>] <i class="conum" data-value="6"></i><b>(6)</b>
+          version = <span class="string"><span class="delimiter">'</span><span class="content">1.2</span><span class="delimiter">'</span></span> <i class="conum" data-value="7"></i><b>(7)</b>
+      }
+  }
+}</code></pre> 
+      </div> 
+     </div> 
+     <div class="colist arabic"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td><i class="conum" data-value="1"></i><b>1</b></td> 
+         <td>Each plugin in a bundle is specified in the <code>plugins</code> block. As you are only publishing a single plugin at this point there will only be one entry, but should your project publish a bundle in future you will list each of them in here.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="2"></i><b>2</b></td> 
+         <td>The name for each plugin block does not affect the plugin configuration, but needs to be unique for each plugin provided.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="3"></i><b>3</b></td> 
+         <td>Must be the same identifier specified in the plugin properties file located in the <code>src/main/resources/META-INF/gradle-plugins</code> directory.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="4"></i><b>4</b></td> 
+         <td>Set the plugin name in human-readable form.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="5"></i><b>5</b></td> 
+         <td>Set a description that will be displayed on the portal. Although this is optional, it provides useful information to people would might want to use your plugin. Please give careful thought to the value of this property.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="6"></i><b>6</b></td> 
+         <td>Set tags that build script authors might use to search for plugin types. This can make your plugin easier to locate.</td> 
+        </tr> 
+        <tr> 
+         <td><i class="conum" data-value="7"></i><b>7</b></td> 
+         <td>By default the version from <code>project.version</code> will be used, but you can set your own version if required.</td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
+     <div class="paragraph"> 
+      <p>Think about what would be the correct metadata for your plugin and fill in the template appropriately. Here is an example of the <code>pluginBundle</code> configuration for the the <a href="https://github.com/gradle-guides/greeting-plugin-example">Greeting Plugin example</a>:</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="title">
+       build.gradle
+      </div> 
+      <div class="content"> 
+       <pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
+    website = <span class="string"><span class="delimiter">'</span><span class="content">http://www.gradle.org/</span><span class="delimiter">'</span></span>
+    vcsUrl = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/gradle-guides/greeting-plugin-example</span><span class="delimiter">'</span></span>
+
+    plugins {
+        greetingsPlugin {
+            id = <span class="string"><span class="delimiter">'</span><span class="content">org.samples.greeting</span><span class="delimiter">'</span></span>
+            displayName = <span class="string"><span class="delimiter">'</span><span class="content">Gradle Guides Example Greeting Plugin</span><span class="delimiter">'</span></span>
+            description = <span class="string"><span class="delimiter">'</span><span class="content">The Greeting plugin is used as a template for people to start their own plugin adventure</span><span class="delimiter">'</span></span>
+            tags = [<span class="string"><span class="delimiter">'</span><span class="content">example</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">greeting</span><span class="delimiter">'</span></span>]
+            version = <span class="string"><span class="delimiter">'</span><span class="content">1.2</span><span class="delimiter">'</span></span>
+        }
+    }
+}</code></pre> 
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>As a second example of plugin configuration, consider the <a href="https://plugins.gradle.org/plugin/org.ysb33r.gradletest">GradleTest plugin</a> which is already published to the Gradle Plugin Portal.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="title">
+       build.gradle (for GradleTest project)
+      </div> 
+      <div class="content"> 
+       <pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
+    website     = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/ysb33r/gradleTest</span><span class="delimiter">'</span></span>
+    vcsUrl      = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/ysb33r/gradleTest.git</span><span class="delimiter">'</span></span>
+
+    plugins {
+        gradletestPlugin {
+            id = <span class="string"><span class="delimiter">'</span><span class="content">org.ysb33r.gradletest</span><span class="delimiter">'</span></span>
+            displayName = <span class="string"><span class="delimiter">'</span><span class="content">Plugin for compatibility testing of Gradle plugins</span><span class="delimiter">'</span></span>
+            description = <span class="string"><span class="delimiter">'</span><span class="content">A plugin that helps you test your plugin against a variety of Gradle versions</span><span class="delimiter">'</span></span>
+            tags = [<span class="string"><span class="delimiter">'</span><span class="content">testing</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">integrationTesting</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">compatibility</span><span class="delimiter">'</span></span>]
+        }
+    }
+}</code></pre> 
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>If you browse the associated page on the Gradle Plugin Portal for the <a href="https://plugins.gradle.org/plugin/org.ysb33r.gradletest">GradleTest plugin</a>, you will see how the specified metadata is displayed.</p> 
+     </div> 
+     <div class="imageblock"> 
+      <div class="content"> 
+       <img src="images/org.ysb33r.gradletest-1299x354.png" alt="org.ysb33r.gradletest 1299x354"> 
+      </div> 
+      <div class="title">
+       Figure 3. GradleTest plugin metadata on the Gradle Plugin Portal
+      </div> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
-    <h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2> 
+    <h2 id="publish_your_plugin"><a class="anchor" href="#publish_your_plugin"></a>Publish your plugin</h2> 
     <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Publish the plugin by using the <code>publishPlugin</code> task.</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="content"> 
+       <pre>$ ./gradlew publishPlugins</pre> 
+      </div> 
+     </div> 
+     <div class="paragraph"> 
+      <p>If you have not configured your Gradle Plugin Portal key and secret values in your <code>gradle.properties</code> file, you can specify them on the command-line</p> 
+     </div> 
+     <div class="listingblock"> 
+      <div class="content"> 
+       <pre>$ ./gradlew publishPlugins -Pgradle.publish.key=&lt;key&gt; -Pgradle.publish.secret=&lt;secret&gt;</pre> 
+      </div> 
+     </div> 
+     <div class="admonitionblock note"> 
+      <table> 
+       <tbody>
+        <tr> 
+         <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> 
+         <td class="content"> If you publish the example <code>GreetingPlugin</code> as-is, it will be rejected. That will keep the portal from being overrun with too many experimental and duplicate greeting-type plugins. In this case the following <a href="#consume">Consume the publish plugin</a> section will not be applicable. </td> 
+        </tr> 
+       </tbody>
+      </table> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="sect1"> 
+    <h2 id="consume"><a class="anchor" href="#consume"></a>Consume the published plugin</h2> 
+    <div class="sectionbody"> 
+     <div class="paragraph"> 
+      <p>Once your plugin has been published, the instructions for others to use it will automatically appear on the plugin under a URL of the form <strong>https://plugins.gradle.org/plugin/&lt;your-plugin-id&gt;</strong>.</p> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="sect1"> 
+    <h2 id="next_steps"><a class="anchor" href="#next_steps"></a>Next steps</h2> 
+    <div class="sectionbody"> 
+     <div class="ulist"> 
+      <ul> 
+       <li> <p>Read the <a href="https://plugins.gradle.org/docs/publish-plugin">reference documentation for the Plugin Publishing Plugin</a>.</p> </li> 
+      </ul> 
+     </div> 
     </div> 
    </div> 
   </div> 
   <div id="footer"> 
    <div id="footer-text">
-     Last updated 2017-04-03 23:06:32 UTC 
+     Last updated 2017-04-04 08:50:51 UTC 
    </div> 
   </div>  
  </body>
