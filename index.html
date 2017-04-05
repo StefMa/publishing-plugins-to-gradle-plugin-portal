@@ -317,6 +317,55 @@
        Figure 3. GradleTest plugin metadata on the Gradle Plugin Portal
       </div> 
      </div> 
+     <div class="sect2"> 
+      <h3 id="migrating_an_existing_plugin_from_bintray"><a class="anchor" href="#migrating_an_existing_plugin_from_bintray"></a>Migrating an existing plugin from Bintray</h3> 
+      <div class="paragraph"> 
+       <p>If, and only if, you have an existing plugin that is already published on <a href="https://bintray.com/">Bintray</a> and for continuity would like to keep the existing group and artifact identifiers when re-publishing it on the Gradle Plugin Portal, you need one extra step.</p> 
+      </div> 
+      <div class="paragraph"> 
+       <p>Add the following snippet into the <code>pluginBundle</code> configuration block and substitute the values accordingly.</p> 
+      </div> 
+      <div class="listingblock"> 
+       <div class="title">
+        build.gradle
+       </div> 
+       <div class="content"> 
+        <pre class="CodeRay highlight"><code data-lang="groovy">mavenCoordinates {
+    groupId = <span class="string"><span class="delimiter">'</span><span class="content">&lt;your existing maven group identifier&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
+    artifactId = <span class="string"><span class="delimiter">'</span><span class="content">&lt;your existing maven artifact identifier&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="2"></i><b>(2)</b>
+    version = <span class="string"><span class="delimiter">'</span><span class="content">&lt;the version that it is published under&gt;</span><span class="delimiter">'</span></span>  <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre> 
+       </div> 
+      </div> 
+      <div class="colist arabic"> 
+       <table> 
+        <tbody>
+         <tr> 
+          <td><i class="conum" data-value="1"></i><b>1</b></td> 
+          <td>Existing Maven group identifier. In many cases this is just <code>project.group</code>.</td> 
+         </tr> 
+         <tr> 
+          <td><i class="conum" data-value="2"></i><b>2</b></td> 
+          <td>Existing Maven artifact identifier. In many cases this is just <code>project.name</code>.</td> 
+         </tr> 
+         <tr> 
+          <td><i class="conum" data-value="3"></i><b>3</b></td> 
+          <td>The version can be overridden here. It is an optional property and will default to <code>project.version</code>.</td> 
+         </tr> 
+        </tbody>
+       </table> 
+      </div> 
+      <div class="admonitionblock warning"> 
+       <table> 
+        <tbody>
+         <tr> 
+          <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> 
+          <td class="content"> For security reasons, if you do this, your plugin will be subject to manual approval by the Gradle team before it will be released. You should not do the above unless you are certain that you want to keep your current group identifier. (Plugins without a <code>mavenCoordinates</code> block will be published automatically unless it clashes with a plugin identifier that belongs to someone else). </td> 
+         </tr> 
+        </tbody>
+       </table> 
+      </div> 
+     </div> 
     </div> 
    </div> 
    <div class="sect1"> 
@@ -371,7 +420,7 @@
   </div> 
   <div id="footer"> 
    <div id="footer-text">
-     Last updated 2017-04-04 08:50:51 UTC 
+     Last updated 2017-04-05 07:52:36 UTC 
    </div> 
   </div>  
  </body>
