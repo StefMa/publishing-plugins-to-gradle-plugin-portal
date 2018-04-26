@@ -3,14 +3,14 @@
 <head><link crossorigin href="//assets.gradle.com" rel="preconnect">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,400i">
 <link rel="stylesheet" href="https://guides.gradle.org/css/asciidoctor.css">
-<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.5.2.css">
+<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.7.css">
 <link rel="apple-touch-icon" sizes="180x180" href="https://guides.gradle.org/icon/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-16x16.png" sizes="16x16">
 <link rel="manifest" href="https://guides.gradle.org/icon/manifest.json">
 <link rel="mask-icon" href="https://guides.gradle.org/icon/safari-pinned-tab.svg" color="#5bbad5">
 <link rel="shortcut icon" href="https://guides.gradle.org/icon/favicon.ico">
-<script defer src="https://guides.gradle.org/js/guides.js"></script>
+<script defer src="https://guides.gradle.org/js/guides-4.7.js"></script>
 <script defer src="https://guides.gradle.org/js/set-time-to-complete-text.js"></script>
 <script async src="https://guides.gradle.org/js/autotrack.js"></script>
 
@@ -21,7 +21,6 @@
 <meta name="author" content="Schalk Cronjé">
 <title>Publishing Plugins to Gradle Plugin Portal</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="./coderay-asciidoctor.css">
 </head>
 <body class="article">
 <header class="site-layout__header site-header" itemscope="itemscope" itemtype="https://schema.org/WPHeader">
@@ -139,7 +138,7 @@
 <p>The Java Development Kit (JDK), version 1.7 or higher</p>
 </li>
 <li>
-<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.6 or better</p>
+<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.7 or better</p>
 </li>
 <li>
 <p>Source code for an existing Gradle plugin. (Preferably your own).</p>
@@ -198,7 +197,7 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="title">Figure 2. API keys is the third tab</div>
 </div>
 <div class="paragraph">
-<p>It is common practice to copy-paste the text into your <a href="https://docs.gradle.org/4.6/userguide/build_environment.html#properties">$HOME/.gradle/gradle.properties</a> file, but if you wish you can place it elsewhere. All that the plugin requires is that <code>gradle.publish.key</code> and <code>gradle.publish.secret</code> are available as project properties when the appropriate Plugin portal tasks are executed.</p>
+<p>It is common practice to copy-paste the text into your <a href="https://docs.gradle.org/4.7/userguide/build_environment.html#properties">$HOME/.gradle/gradle.properties</a> file, but if you wish you can place it elsewhere. All that the plugin requires is that <code>gradle.publish.key</code> and <code>gradle.publish.secret</code> are available as project properties when the appropriate Plugin portal tasks are executed.</p>
 </div>
 <div class="paragraph">
 <p>If you are concerned about placing your credentials in <code>gradle.properties</code>, investigate use of <a href="https://plugins.gradle.org/plugin/de.qaware.seu.as.code.credentials">Seauc Credentials plugin</a> or the <a href="https://plugins.gradle.org/plugin/nu.studer.credentials">Gradle Credentials plugin</a>.</p>
@@ -217,8 +216,8 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-    id <span class="string"><span class="delimiter">'</span><span class="content">com.gradle.plugin-publish</span><span class="delimiter">'</span></span> version <span class="string"><span class="delimiter">'</span><span class="content">0.9.7</span><span class="delimiter">'</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
+    id 'com.gradle.plugin-publish' version '0.9.7' <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
 </div>
 </div>
@@ -241,9 +240,9 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle { <i class="conum" data-value="1"></i><b>(1)</b>
-    website = <span class="string"><span class="delimiter">'</span><span class="content">&lt;substitute your project website&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="2"></i><b>(2)</b>
-    vcsUrl = <span class="string"><span class="delimiter">'</span><span class="content">&lt;uri to project source repository&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle { <i class="conum" data-value="1"></i><b>(1)</b>
+    website = '&lt;substitute your project website&gt;' <i class="conum" data-value="2"></i><b>(2)</b>
+    vcsUrl = '&lt;uri to project source repository&gt;' <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -269,14 +268,14 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
   plugins { <i class="conum" data-value="1"></i><b>(1)</b>
       greetingsPlugin {  <i class="conum" data-value="2"></i><b>(2)</b>
-          id = <span class="string"><span class="delimiter">'</span><span class="content">&lt;your plugin identifier&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
-          displayName = <span class="string"><span class="delimiter">'</span><span class="content">&lt;short displayable name for plugin&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="4"></i><b>(4)</b>
-          description = <span class="string"><span class="delimiter">'</span><span class="content">&lt;Good human-readable description of what your plugin is about&gt;</span><span class="delimiter">'</span></span> <i class="conum" data-value="5"></i><b>(5)</b>
-          tags = [<span class="string"><span class="delimiter">'</span><span class="content">individual</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">tags</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">per</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">plugin</span><span class="delimiter">'</span></span>] <i class="conum" data-value="6"></i><b>(6)</b>
-          version = <span class="string"><span class="delimiter">'</span><span class="content">1.2</span><span class="delimiter">'</span></span> <i class="conum" data-value="7"></i><b>(7)</b>
+          id = '&lt;your plugin identifier&gt;' <i class="conum" data-value="3"></i><b>(3)</b>
+          displayName = '&lt;short displayable name for plugin&gt;' <i class="conum" data-value="4"></i><b>(4)</b>
+          description = '&lt;Good human-readable description of what your plugin is about&gt;' <i class="conum" data-value="5"></i><b>(5)</b>
+          tags = ['individual', 'tags', 'per', 'plugin'] <i class="conum" data-value="6"></i><b>(6)</b>
+          version = '1.2' <i class="conum" data-value="7"></i><b>(7)</b>
       }
   }
 }</code></pre>
@@ -320,17 +319,17 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
-    website = <span class="string"><span class="delimiter">'</span><span class="content">http://www.gradle.org/</span><span class="delimiter">'</span></span>
-    vcsUrl = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/gradle-guides/greeting-plugin-example</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
+    website = 'http://www.gradle.org/'
+    vcsUrl = 'https://github.com/gradle-guides/greeting-plugin-example'
 
     plugins {
         greetingsPlugin {
-            id = <span class="string"><span class="delimiter">'</span><span class="content">org.samples.greeting</span><span class="delimiter">'</span></span>
-            displayName = <span class="string"><span class="delimiter">'</span><span class="content">Gradle Guides Example Greeting Plugin</span><span class="delimiter">'</span></span>
-            description = <span class="string"><span class="delimiter">'</span><span class="content">The Greeting plugin is used as a template for people to start their own plugin adventure</span><span class="delimiter">'</span></span>
-            tags = [<span class="string"><span class="delimiter">'</span><span class="content">example</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">greeting</span><span class="delimiter">'</span></span>]
-            version = <span class="string"><span class="delimiter">'</span><span class="content">1.2</span><span class="delimiter">'</span></span>
+            id = 'org.samples.greeting'
+            displayName = 'Gradle Guides Example Greeting Plugin'
+            description = 'The Greeting plugin is used as a template for people to start their own plugin adventure'
+            tags = ['example','template','greeting']
+            version = '1.2'
         }
     }
 }</code></pre>
@@ -342,16 +341,16 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle (for GradleTest project)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">pluginBundle {
-    website     = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/ysb33r/gradleTest</span><span class="delimiter">'</span></span>
-    vcsUrl      = <span class="string"><span class="delimiter">'</span><span class="content">https://github.com/ysb33r/gradleTest.git</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
+    website     = 'https://github.com/ysb33r/gradleTest'
+    vcsUrl      = 'https://github.com/ysb33r/gradleTest.git'
 
     plugins {
         gradletestPlugin {
-            id = <span class="string"><span class="delimiter">'</span><span class="content">org.ysb33r.gradletest</span><span class="delimiter">'</span></span>
-            displayName = <span class="string"><span class="delimiter">'</span><span class="content">Plugin for compatibility testing of Gradle plugins</span><span class="delimiter">'</span></span>
-            description = <span class="string"><span class="delimiter">'</span><span class="content">A plugin that helps you test your plugin against a variety of Gradle versions</span><span class="delimiter">'</span></span>
-            tags = [<span class="string"><span class="delimiter">'</span><span class="content">testing</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">integrationTesting</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">compatibility</span><span class="delimiter">'</span></span>]
+            id = 'org.ysb33r.gradletest'
+            displayName = 'Plugin for compatibility testing of Gradle plugins'
+            description = 'A plugin that helps you test your plugin against a variety of Gradle versions'
+            tags = ['testing','integrationTesting','compatibility']
         }
     }
 }</code></pre>
@@ -430,6 +429,9 @@ If you publish the example <code>GreetingPlugin</code> as-is, it will be rejecte
 </div>
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
 <footer class="site-layout__footer site-footer" itemscope="itemscope" itemtype="https://schema.org/WPFooter">
     <nav class="site-footer__navigation" itemtype="https://schema.org/SiteNavigationElement">
         <section class="site-footer__links">
