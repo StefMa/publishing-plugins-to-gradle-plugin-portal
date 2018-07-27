@@ -298,7 +298,8 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-    id 'com.gradle.plugin-publish' version '0.9.7' <i class="conum" data-value="1"></i><b>(1)</b>
+    id 'java-gradle-plugin' <i class="conum" data-value="1"></i><b>(1)</b>
+    id 'com.gradle.plugin-publish' version '0.10.0' <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -306,7 +307,11 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The latest version can be found on the <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">portal</a>.</td>
+<td>This guide assumes you&#8217;re using the <a href="https://docs.gradle.org/current/userguide/java_gradle_plugin.html">Java Gradle Plugin Development Plugin</a> which comes with the Gradle distribution and is the recommended way of authoring Gradle plugins.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The latest version of the Plugin Publishing Plugin can be found on the <a href="https://plugins.gradle.org/plugin/com.gradle.plugin-publish">Gradle Plugin Portal</a>.</td>
 </tr>
 </table>
 </div>
@@ -321,9 +326,10 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle { <i class="conum" data-value="1"></i><b>(1)</b>
-    website = '&lt;substitute your project website&gt;' <i class="conum" data-value="2"></i><b>(2)</b>
-    vcsUrl = '&lt;uri to project source repository&gt;' <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
+    website = '&lt;substitute your project website&gt;' <i class="conum" data-value="1"></i><b>(1)</b>
+    vcsUrl = '&lt;uri to project source repository&gt;' <i class="conum" data-value="2"></i><b>(2)</b>
+    tags = ['default', 'tags', 'unless', 'overidden', 'in', 'plugin'] <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -331,15 +337,15 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Everything for the plugin is configured in the <code>pluginBundle</code> extension block.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Set the website for your plugin&#8217;s project.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Provide the source repository URI so that others can find it if they want to contribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Set the tags to be used for all plugins unless overridden in the <code>plugins</code> block.</td>
 </tr>
 </table>
 </div>
@@ -349,16 +355,24 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
-  plugins { <i class="conum" data-value="1"></i><b>(1)</b>
-      greetingsPlugin {  <i class="conum" data-value="2"></i><b>(2)</b>
-          id = '&lt;your plugin identifier&gt;' <i class="conum" data-value="3"></i><b>(3)</b>
-          displayName = '&lt;short displayable name for plugin&gt;' <i class="conum" data-value="4"></i><b>(4)</b>
-          description = '&lt;Good human-readable description of what your plugin is about&gt;' <i class="conum" data-value="5"></i><b>(5)</b>
-          tags = ['individual', 'tags', 'per', 'plugin'] <i class="conum" data-value="6"></i><b>(6)</b>
-          version = '1.2' <i class="conum" data-value="7"></i><b>(7)</b>
-      }
-  }
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">gradlePlugin {
+    plugins { <i class="conum" data-value="1"></i><b>(1)</b>
+        greetingsPlugin {  <i class="conum" data-value="2"></i><b>(2)</b>
+            id = '&lt;your plugin identifier&gt;' <i class="conum" data-value="3"></i><b>(3)</b>
+            implementationClass = '&lt;your plugin class&gt;'
+        }
+    }
+}
+pluginBundle {
+    plugins { <i class="conum" data-value="1"></i><b>(1)</b>
+        greetingsPlugin {  <i class="conum" data-value="2"></i><b>(2)</b>
+            // id is captured from gradlePlugin extension block <i class="conum" data-value="3"></i><b>(3)</b>
+            displayName = '&lt;short displayable name for plugin&gt;' <i class="conum" data-value="4"></i><b>(4)</b>
+            description = '&lt;Good human-readable description of what your plugin is about&gt;' <i class="conum" data-value="5"></i><b>(5)</b>
+            tags = ['individual', 'tags', 'per', 'plugin'] <i class="conum" data-value="6"></i><b>(6)</b>
+            version = '1.2' <i class="conum" data-value="7"></i><b>(7)</b>
+        }
+    }
 }</code></pre>
 </div>
 </div>
@@ -366,15 +380,15 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Each plugin in a bundle is specified in the <code>plugins</code> block. As you are only publishing a single plugin at this point there will only be one entry, but should your project publish a bundle in the future you will list each of them in here.</td>
+<td>Each plugin in a bundle is specified in the <code>plugins</code> blocks. As you are only publishing a single plugin at this point there will only be one entry, but should your project publish a bundle in the future you will list each of them in here.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The name for each plugin block does not affect the plugin configuration, but needs to be unique for each plugin provided.</td>
+<td>The name for each plugin block does not affect the plugin configuration, but needs to be unique for each plugin provided. Moreover, the names of the plugin in the <code>gradlePlugin</code> and <code>pluginBundle</code> extension blocks must match.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Must be the same identifier as specified in the plugin properties filename, the latter to be located in the <code>src/main/resources/META-INF/gradle-plugins</code> directory.</td>
+<td>The <code>id</code> specified in the <code>gradlePlugin</code> extension block is used for the plugin with the same name in the <code>pluginBundle</code> extension block.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -394,6 +408,18 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Gradle 4.10 adds support for configuring <code>displayName</code> and <code>description</code> in the <code>plugins</code> section of the <code>gradlePlugin</code> extension block. Thus, you only need to reiterate those plugins in the <code>pluginBundle</code> extension block for which you need to specify a custom <code>version</code> or custom <code>tags</code>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Think about what would be the correct metadata for your plugin and fill in the template appropriately. Here is an example of the <code>pluginBundle</code> configuration for the the <a href="https://github.com/gradle-guides/greeting-plugin-example">Greeting Plugin example</a>:</p>
 </div>
@@ -401,16 +427,15 @@ If you have never written a plugin, you can use the <a href="https://github.com/
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pluginBundle {
+    // please change these URLs to point to your own website/repository
     website = 'http://www.gradle.org/'
     vcsUrl = 'https://github.com/gradle-guides/greeting-plugin-example'
+    tags = ['example', 'template']
 
     plugins {
         greetingsPlugin {
-            id = 'org.samples.greeting'
-            displayName = 'Gradle Guides Example Greeting Plugin'
-            description = 'The Greeting plugin is used as a template for people to start their own plugin adventure'
-            tags = ['example','template','greeting']
-            version = '1.2'
+            displayName = 'Greeting Plugin'
+            description = 'Template for people to start their own plugin adventure'
         }
     }
 }</code></pre>
